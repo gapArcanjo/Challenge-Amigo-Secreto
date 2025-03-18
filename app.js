@@ -1,58 +1,55 @@
 let amigos = [];
 
-    function adicionarAmigo() {
-        const input = document.getElementById('amigo');
-        const nome = input.value.trim();
+let sorteados = [];
 
-    if (nome) {
-        if (amigos.includes(nome)) {
-          alert('Este nome já foi adicionado.');
-    } else {
-          amigos.push(nome);
-          atualizarListaAmigos();
-          input.value = '';
-        }
-    } else {
-        alert('Por favor, insira um nome válido.');
-      }
-    }
+function adicionarAmigo() {
+  const input = document.getElementById("amigo");
+  let nome = input.value.trim();
 
-    function atualizarListaAmigos() {
-            const lista = document.getElementById('listaAmigos');
-        lista.innerHTML = '';
-        amigos.forEach((amigo) => {
-            const li = document.createElement('li');
-          li.textContent = amigo;
-          lista.appendChild(li);
-        });
-      }
-
-    function embaralhar(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-      }
-    function sortearAmigo() {
-    if (amigos.length < 2) {
-        alert('Adicione pelo menos 2 amigos para sortear.');
+  if (nome === "" || !isNaN(nome)) {
+    alert("Por favor, insira um nome válido.");
     return;
-        }
+  }
 
-        embaralhar(amigos);
+  amigos.push(nome);
+  atualizarLista();
 
-        const indice = amigos.indexOf(participante);
+  input.value = "";
+}
 
-    if (indice !== -1) {
-            const amigoSecreto = amigos[(indice + 1) % amigos.length];
-            exibirResultado(`O amigo secreto de ${participante} é: ${amigoSecreto}`);
-    } else {
-            exibirResultado(`O participante ${participante} não está na lista.`);
-        }
-        }
+function atualizarLista() {
+  const lista = document.getElementById("listaAmigos");
+  (lista.innerHTML = ""),
+    amigos.forEach((amigo, index) => {
+      const li = document.createElement("li");
+      li.textContent = amigo + (index < amigos.lenght - 1 ? "," : "");
+      lista.appendChild(li);
+    });
+}
 
-    function exibirResultado(mensagem) {
-            const resultado = document.getElementById('resultado');
-            resultado.textContent = mensagem;
-          }
-        atualizarListaAmigos();
+function sortearAmigo() {
+  if (amigos.lenght === 0) {
+    alert("A lista de amigos está vazia.");
+    return;
+  }
+
+  if (amigos.length <= 2) {
+    alert("Para poder realizar o sorteio, é preciso ter três amigos ou mais.");
+    return;
+  }
+
+  let indiceSorteado = Math.floor(Math.random() * amigos.length);
+
+  let amigoSorteado = amigos[indiceSorteado];
+
+  sorteados.push(amigoSorteado);
+
+  const resultado = document.getElementById("resultado");
+  resultado.innerHTML = "O amigo secreto sorteado é: " + sorteados;
+
+  dispararConfete();
+
+  sorteados = [];
+
+  atualizarLista();
+}
